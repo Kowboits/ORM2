@@ -41,14 +41,12 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # data_loader(session)
+
 requ = input('Введите ID или название автора:')
 if requ.isdigit():
     print(*search_publisher(session, id=requ))
 else:
     print(*search_publisher(session, name=requ))
-
-# for c in session.query(Publisher).filter(Publisher.id == 1).all():
-#     print(c)
 
 session.close()
 
