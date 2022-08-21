@@ -50,24 +50,20 @@ def get_DSN():
         return f"{data['database']}://{data['user']}:{data['pass']}@localhost:5432/{data['database_name']}"
 
 
-# DSN = "postgresql://postgres:postgres@localhost:5432/netology_orm"
-DSN = get_DSN()
-engine = sqlalchemy.create_engine(DSN)
-
-# create_tables(engine)
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# data_loader(session)
-
-requ = input('Введите ID или название автора:')
-if requ.isdigit():
-    print('Автор: \n',*search_publisher(session, id=requ))
-    print('Магазины: \n', *search_shop(session, pub_id=requ))
-else:
-    print('Автор: \n', *search_publisher(session, name=requ))
-    print('Магазины: \n', *search_shop(session, pub_name=requ))
-session.close()
+if __name__ == "__main__":
+    DSN = get_DSN()
+    engine = sqlalchemy.create_engine(DSN)
+    # create_tables(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    # data_loader(session)
+    requ = input('Введите ID или название автора:')
+    if requ.isdigit():
+        print('Автор: \n',*search_publisher(session, id=requ))
+        print('Магазины: \n', *search_shop(session, pub_id=requ))
+    else:
+        print('Автор: \n', *search_publisher(session, name=requ))
+        print('Магазины: \n', *search_shop(session, pub_name=requ))
+    session.close()
 
 
