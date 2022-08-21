@@ -16,6 +16,19 @@ def search_publisher(session, name=None, id=None):
             result.append(c)
         return result
 
+def search_shop(session, pub_id=None, pub_name=None):
+    if pub_id is not None:
+        result = []
+        for c in session.query(Shop).join(Stock).join(Book).join(Publisher).filter(Publisher.id == pub_id).all():
+            result.append(c)
+        return result
+
+    if pub_name is not None:
+        result = []
+        for c in session.query(Shop).join(Stock).join(Book).join(Publisher).filter(Publisher.name == pub_name).all():
+            result.append(c)
+        return result
+
 def data_loader(session):
     with open('test_data.json', 'r') as fd:
         data = json.load(fd)
@@ -31,8 +44,14 @@ def data_loader(session):
         session.add(model(id=record.get('pk'), **record.get('fields')))
     session.commit()
 
+def get_DSN():
+    with open('acess.json', 'r') as ac:
+        data = json.load(ac)[0]
+        return f"{data['database']}://{data['user']}:{data['pass']}@localhost:5432/{data['database_name']}"
 
-DSN = "postgresql://postgres:postgres@localhost:5432/netology_orm"
+
+# DSN = "postgresql://postgres:postgres@localhost:5432/netology_orm"
+DSN = get_DSN()
 engine = sqlalchemy.create_engine(DSN)
 
 # create_tables(engine)
@@ -44,10 +63,11 @@ session = Session()
 
 requ = input('Введите ID или название автора:')
 if requ.isdigit():
-    print(*search_publisher(session, id=requ))
+    print('Автор: \n',*search_publisher(session, id=requ))
+    print('Магазины: \n', *search_shop(session, pub_id=requ))
 else:
-    print(*search_publisher(session, name=requ))
-
+    print('Автор: \n', *search_publisher(session, name=requ))
+    print('Магазины: \n', *search_shop(session, pub_name=requ))
 session.close()
 
 

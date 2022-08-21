@@ -1,0 +1,5 @@
+[
+  {
+    "database": "postgresql", "user": "postgres", "pass": "postgres", "database_name": "netology_orm"
+  }
+]
